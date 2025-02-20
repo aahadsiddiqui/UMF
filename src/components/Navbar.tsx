@@ -151,7 +151,7 @@ export default function Navbar() {
           >
             <div className="container mx-auto px-4 py-4">
               {navItems.map((item) => (
-                <div key={item.title} className="mb-6">
+                <div key={item.href} className="mb-6">
                   <Link
                     href={item.href}
                     className="text-white font-semibold text-lg mb-2 hover:text-[#66e8fd] transition-colors"
@@ -162,7 +162,7 @@ export default function Navbar() {
                   <div className="mt-2 ml-4 space-y-2">
                     {item.dropdownItems.map((dropdownItem) => (
                       <Link
-                        key={dropdownItem.name}
+                        key={dropdownItem.href}
                         href={dropdownItem.href}
                         className="block text-gray-300 hover:text-white transition-colors"
                         onClick={() => setIsMobileMenuOpen(false)}
