@@ -1,0 +1,227 @@
+:root {
+  /* Primary Colors */
+  --brand-blue: #66e8fd;    /* Main brand color */
+  --brand-dark: #33d7fc;    /* Darker shade for hover states */
+  --brand-light: #99f2fe;   /* Lighter shade for backgrounds */
+  
+  /* Supporting Colors */
+  --text-dark: #2c3e50;     /* For better contrast with light blue */
+  --text-light: #ffffff;
+  --background-light: #f0f9fb;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  line-height: 1.6;
+  color: var(--text-dark);
+  background-color: var(--background-light);
+}
+
+/* Modern Card Styling */
+.card {
+  background: var(--text-light);
+  border-radius: 12px;
+  border: 1px solid var(--brand-blue);
+  box-shadow: 0 4px 6px rgba(102, 232, 253, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  padding: 1.5rem;
+  margin: 1rem 0;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(102, 232, 253, 0.2);
+}
+
+/* Modern Button Styling */
+.btn {
+  background: var(--text-light);
+  color: var(--brand-blue);
+  padding: 0.8rem 1.5rem;
+  border-radius: 25px;
+  border: 2px solid var(--text-light);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn:hover {
+  background: var(--brand-light);
+  color: var(--brand-blue);
+}
+
+/* Animated Navigation */
+.nav-link {
+  position: relative;
+  color: var(--text-dark);
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: var(--text-dark);
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+.nav-link:hover {
+  color: var(--text-dark);
+  opacity: 0.9;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 1rem;
+  }
+  
+  .card {
+    margin: 0.5rem 0;
+  }
+}
+
+/* Smooth Animations */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeIn 0.6s ease forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Update header styling */
+.main-header {
+  background: #66e8fd !important;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+}
+
+/* Hero section styling */
+.hero {
+  background: #66e8fd !important; /* Force the logo blue */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+/* Donate button specific styling */
+.btn.donate-btn {
+  background: var(--text-dark);
+  color: #66e8fd;
+  border: 2px solid var(--text-dark);
+  font-weight: 600;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+}
+
+.btn.donate-btn:hover {
+  background: transparent;
+  color: var(--text-dark);
+}
+
+/* Navigation active state */
+.nav-link.active {
+  color: var(--text-light);
+  font-weight: 600;
+}
+
+/* Mobile menu styling */
+.mobile-menu-btn span {
+  background-color: var(--text-dark);
+}
+
+@media (max-width: 768px) {
+  .nav-links.active {
+    background-color: #66e8fd;
+  }
+  
+  .nav-links.active .nav-link {
+    color: var(--text-dark);
+  }
+  
+  .nav-links.active .nav-link:hover {
+    background-color: var(--brand-dark);
+    color: var(--text-light);
+  }
+}
+
+/* Accent elements */
+.feature-icon {
+  color: var(--brand-blue);
+}
+
+.highlight-text {
+  color: var(--brand-blue);
+}
+
+/* Form elements */
+input:focus, 
+textarea:focus {
+  border-color: var(--brand-blue);
+  box-shadow: 0 0 0 2px rgba(102, 232, 253, 0.2);
+}
+
+/* Section backgrounds */
+.alternate-section {
+  background: linear-gradient(45deg, var(--brand-blue) 0%, var(--brand-light) 100%);
+}
+
+/* Update text colors */
+.text-primary {
+  color: var(--brand-blue);
+}
+
+/* Main header/navigation area */
+.main-header {
+  background: #66e8fd !important;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+}
+
+/* Override any potential background classes */
+.hero-section,
+.homepage-hero,
+.main-hero,
+[class*="hero"] {
+  background: #66e8fd !important;
+}
+
+/* Ensure text contrast */
+.hero h1,
+.hero p,
+.hero-text {
+  color: var(--text-dark);
+}
+
+/* Update the down arrow color if present */
+.scroll-arrow {
+  color: var(--text-dark);
+} 
