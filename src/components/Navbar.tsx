@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaBars, FaTimes, FaUsers, FaGlobeAmericas, FaHome, FaBook, FaUserFriends, FaHandsHelping, FaChartLine, FaEnvelope, FaQuestionCircle, FaTurkeyFlag, FaSchool, FaUtensils, FaCalendarAlt, FaHandshake, FaGraduationCap, FaHeartbeat, FaPiggyBank, FaHeart } from 'react-icons/fa';
+import { FaBars, FaTimes, FaUsers, FaGlobeAmericas, FaHome, FaBook, FaUserFriends, FaHandsHelping, FaChartLine, FaEnvelope, FaQuestionCircle, FaSchool, FaUtensils, FaCalendarAlt, FaHandshake, FaGraduationCap, FaHeartbeat, FaPiggyBank, FaHeart } from 'react-icons/fa';
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
