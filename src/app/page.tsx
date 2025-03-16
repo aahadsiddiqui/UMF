@@ -348,9 +348,7 @@ export default function Home() {
 
       {/* Second Hadith Section */}
       <section className="py-20 bg-[#1e2a37] relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0 bg-pattern-islamic"></div>
-        </div>
+        <div className="absolute inset-0 bg-[#2c3e50]/10" />
         <div className="container mx-auto px-4">
           <motion.div 
             className="max-w-4xl mx-auto text-center text-white"
@@ -375,34 +373,6 @@ export default function Home() {
             </div>
           </motion.div>
         </div>
-
-        {/* Decorative Islamic Pattern Elements */}
-        <motion.div
-          className="absolute top-0 left-0 w-32 h-32 opacity-10"
-          initial={{ rotate: 0 }}
-          animate={{ rotate: 360 }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-        >
-          <Image
-            src="/islamic-pattern.png" // You'll need to add this image
-            alt=""
-            fill
-            className="object-contain"
-          />
-        </motion.div>
-        <motion.div
-          className="absolute bottom-0 right-0 w-32 h-32 opacity-10"
-          initial={{ rotate: 360 }}
-          animate={{ rotate: 0 }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-        >
-          <Image
-            src="/islamic-pattern.png" // You'll need to add this image
-            alt=""
-            fill
-            className="object-contain"
-          />
-        </motion.div>
       </section>
 
       {/* Impact Stats Section */}

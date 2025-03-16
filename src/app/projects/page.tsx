@@ -94,9 +94,7 @@ export default function Projects() {
 
       {/* Hadith Section */}
       <section className="py-16 bg-[#2c3e50] relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0 bg-pattern-islamic"></div>
-        </div>
+        <div className="absolute inset-0 bg-[#2c3e50]/10" />
         <div className="container mx-auto px-4">
           <motion.div 
             className="max-w-4xl mx-auto text-center text-white"
