@@ -1,7 +1,16 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
+// Debug logging
+console.log('Checkout session route starting');
+console.log('STRIPE_SECRET_KEY exists:', !!process.env.STRIPE_SECRET_KEY);
+console.log('Environment variables:', {
+  NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
+  NODE_ENV: process.env.NODE_ENV
+});
+
 if (!process.env.STRIPE_SECRET_KEY) {
+  console.error('STRIPE_SECRET_KEY is missing in checkout route');
   throw new Error('STRIPE_SECRET_KEY is not set');
 }
 

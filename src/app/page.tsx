@@ -35,7 +35,7 @@ export default function Home() {
       id: "02.",
       title: "Uganda Healthcare",
       description: "Support our mission to establish vital healthcare services.\nEvery donation brings healing to those in need.",
-      image: "/uganda.jpg",
+      image: "/uganda.jpg?v=1",
       primaryCta: "Donate Now",
       primaryLink: "/donate",
       secondaryCta: "Learn More",
