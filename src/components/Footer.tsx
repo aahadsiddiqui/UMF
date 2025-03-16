@@ -71,81 +71,75 @@ const socialLinks = [
 
 export default function Footer() {
   return (
-    <footer className="bg-[#1e2a37] text-white">
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
-          {/* Logo and Description */}
-          <div className="lg:col-span-1">
-            <Link href="/" className="flex items-center mb-4">
-              <Image src="/UMG-Logo.png" alt="Logo" width={150} height={40} className="brightness-0 invert" />
-            </Link>
-            <p className="text-gray-400 text-sm mb-6">
-              A youth-driven force for positive change in communities worldwide
-            </p>
-            {/* Social Media Links */}
-            <div className="flex space-x-4">
+    <footer className="bg-[#2c3e50] text-white py-12">
+      <div className="container mx-auto px-4">
+        {/* Grid Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {/* Quick Links */}
+          <div className="space-y-4">
+            <h3 className="text-xl font-bold mb-4">Quick Links</h3>
+            <div className="flex flex-col space-y-2">
+              <Link href="/about" className="hover:text-gray-300 transition-colors">About Us</Link>
+              <Link href="/programs" className="hover:text-gray-300 transition-colors">Our Programs</Link>
+              <Link href="/donate" className="hover:text-gray-300 transition-colors">Donate</Link>
+              <Link href="/about/contact" className="hover:text-gray-300 transition-colors">Contact</Link>
+            </div>
+          </div>
+
+          {/* Programs */}
+          <div className="space-y-4">
+            <h3 className="text-xl font-bold mb-4">Programs</h3>
+            <div className="flex flex-col space-y-2">
+              <Link href="/programs/fill-your-backpack" className="hover:text-gray-300 transition-colors">Fill Your Backpack</Link>
+              <Link href="/programs/fuel-your-health" className="hover:text-gray-300 transition-colors">Fuel Your Health</Link>
+              <Link href="/programs/fund-your-future" className="hover:text-gray-300 transition-colors">Fund Your Future</Link>
+            </div>
+          </div>
+
+          {/* Contact Info */}
+          <div className="space-y-4">
+            <h3 className="text-xl font-bold mb-4">Contact Us</h3>
+            <div className="flex flex-col space-y-2">
+              <a href="mailto:info@unitedmuslimfund.org" className="hover:text-gray-300 transition-colors">
+                info@unitedmuslimfund.org
+              </a>
+              <p>Toronto, Ontario</p>
+            </div>
+          </div>
+
+          {/* Social Links - Updated */}
+          <div className="space-y-4">
+            <h3 className="text-xl font-bold mb-4">Follow Us</h3>
+            <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
               {socialLinks.map((link) => (
                 <motion.a
                   key={link.name}
                   href={link.href}
                   target={link.isEmail ? '_self' : '_blank'}
                   rel={link.isEmail ? '' : 'noopener noreferrer'}
-                  className="text-gray-400 hover:text-white transition-colors"
+                  className="bg-white text-[#2c3e50] p-3 rounded-full hover:bg-gray-200 transition-colors flex items-center justify-center"
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.95 }}
                   title={link.name}
                 >
-                  {link.icon}
+                  {React.cloneElement(link.icon, { className: "w-5 h-5" })}
                 </motion.a>
               ))}
             </div>
           </div>
+        </div>
 
-          {/* Navigation Sections */}
-          {Object.entries(footerSections).map(([title, items]) => (
-            <div key={title}>
-              <h3 className="font-semibold mb-4 text-lg">{title}</h3>
-              <ul className="space-y-2">
-                {items.map((item) => (
-                  <li key={item.name}>
-                    <Link 
-                      href={item.href}
-                      className="text-gray-400 hover:text-white transition-colors text-sm"
-                    >
-                      {item.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+        {/* Bottom Section */}
+        <div className="mt-12 pt-8 border-t border-gray-700">
+          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+            <p className="text-sm text-gray-400 text-center md:text-left">
+              © {new Date().getFullYear()} United Muslim Fund. All rights reserved.
+            </p>
+            <div className="flex flex-wrap justify-center gap-4 text-sm text-gray-400">
+              <Link href="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link>
+              <Link href="/terms-of-service" className="hover:text-white transition-colors">Terms of Service</Link>
             </div>
-          ))}
-        </div>
-
-        {/* Action Buttons */}
-        <div className="mt-12 flex flex-wrap gap-4 justify-center">
-          {actionButtons.map((button) => (
-            <motion.div
-              key={button.name}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Link
-                href={button.href}
-                className={`px-8 py-3 rounded-full font-semibold transition-colors ${
-                  button.primary
-                    ? 'bg-[#66e8fd] text-[#1e2a37] hover:bg-[#33d7fc]'
-                    : 'bg-[#2c3e50] text-white hover:bg-[#3a4f63]'
-                }`}
-              >
-                {button.name}
-              </Link>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t border-gray-800 text-center text-gray-400 text-sm">
-          <p>© {new Date().getFullYear()} United Muslim Fund. All rights reserved.</p>
+          </div>
         </div>
       </div>
     </footer>

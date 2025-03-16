@@ -125,16 +125,17 @@ export default function Navbar() {
           <div className="lg:hidden flex items-center space-x-4">
             <Link
               href="/donate"
-              className="bg-white text-[#2c3e50] px-6 py-2 rounded-full font-semibold hover:bg-gray-100 transition-colors"
+              className="bg-white text-[#2c3e50] px-4 py-2 rounded-full font-semibold hover:bg-gray-100 transition-colors text-sm"
             >
-              💝 Donate
+              <FaHeart className="inline-block w-4 h-4 mr-1" />
+              Donate
             </Link>
             <button
-              className={`p-2 hover:bg-[#3a4f63] rounded-lg transition-colors ${isScrolled ? 'text-white' : 'text-black'}`}
+              className={`p-2 rounded-lg transition-colors ${isScrolled ? 'text-white hover:bg-white/20' : 'text-[#2c3e50] hover:bg-[#2c3e50]/10'}`}
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               aria-label="Toggle menu"
             >
-              {isMobileMenuOpen ? '✕' : '☰'}
+              {isMobileMenuOpen ? <FaTimes className="w-6 h-6" /> : <FaBars className="w-6 h-6" />}
             </button>
           </div>
         </div>
@@ -147,32 +148,34 @@ export default function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden bg-[#2c3e50] border-t border-[#3a4f63]"
+            className="lg:hidden bg-white border-t border-gray-200 shadow-lg overflow-hidden"
           >
-            <div className="container mx-auto px-4 py-4">
-              {navItems.map((item) => (
-                <div key={item.href} className="mb-6">
-                  <Link
-                    href={item.href}
-                    className="text-white font-semibold text-lg mb-2 hover:text-[#66e8fd] transition-colors"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    {item.title}
-                  </Link>
-                  <div className="mt-2 ml-4 space-y-2">
-                    {item.dropdownItems.map((dropdownItem) => (
-                      <Link
-                        key={dropdownItem.href}
-                        href={dropdownItem.href}
-                        className="block text-gray-300 hover:text-white transition-colors"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        {dropdownItem.name}
-                      </Link>
-                    ))}
+            <div className="container mx-auto px-4 py-6">
+              <div className="space-y-6">
+                {navItems.map((item) => (
+                  <div key={item.href} className="space-y-3">
+                    <Link
+                      href={item.href}
+                      className="text-[#2c3e50] font-semibold text-lg flex items-center gap-2 hover:text-[#3498db] transition-colors"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      {item.title}
+                    </Link>
+                    <div className="ml-6 space-y-2 border-l-2 border-gray-200 pl-4">
+                      {item.dropdownItems.map((dropdownItem) => (
+                        <Link
+                          key={dropdownItem.href}
+                          href={dropdownItem.href}
+                          className="block text-gray-600 hover:text-[#2c3e50] transition-colors py-1"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                          {dropdownItem.name}
+                        </Link>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </motion.div>
         )}

@@ -30,4 +30,27 @@ body {
 .animate-gradient-x {
   background-size: 200% 200%;
   animation: gradient-x 15s ease infinite;
+}
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+@layer utilities {
+  .container {
+    @apply px-4 mx-auto;
+    max-width: 1280px;
+  }
+}
+
+/* Add responsive padding for sections */
+section {
+  @apply px-4 sm:px-6 lg:px-8;
+}
+
+/* Ensure buttons are properly sized on mobile */
+.btn {
+  @apply w-full sm:w-auto;
 } 

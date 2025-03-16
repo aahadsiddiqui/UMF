@@ -1,5 +1,6 @@
 import React from 'react';
 import Navbar from '../components/Navbar';
+import DonationBar from '../components/DonationBar';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import 'leaflet/dist/leaflet.css'
@@ -23,6 +24,7 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         <Navbar />
+        <DonationBar />
         {children}
       </body>
     </html>

@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { FaHandHoldingHeart, FaGlobeAmericas, FaHandHoldingUsd } from 'react-icons/fa';
+import { stripePromise } from '../../lib/stripe';
 import Footer from '../../components/Footer';
 
 const donationOptions = [
@@ -58,6 +59,7 @@ export default function Donate() {
   const [selectedOption, setSelectedOption] = useState(donationOptions[0].id);
   const [donationAmount, setDonationAmount] = useState('100');
   const [customAmount, setCustomAmount] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const predefinedAmounts = ['10', '20', '50', '100', '250', '500'];
 
@@ -69,6 +71,50 @@ export default function Donate() {
   const handleCustomAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/[^0-9]/g, '');
     setDonationAmount(value);
+  };
+
+  const handleDonate = async () => {
+    try {
+      setIsLoading(true);
+      
+      const response = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          amount: parseFloat(donationAmount),
+          type: 'One-Time',
+          category: donationOptions.find(opt => opt.id === selectedOption)?.title || 'General Donation',
+        }),
+      });
+
+      const { sessionId, error } = await response.json();
+
+      if (error) {
+        console.error('Error creating checkout session:', error);
+        alert('Failed to process donation. Please try again.');
+        return;
+      }
+
+      const stripe = await stripePromise;
+      if (!stripe) {
+        alert('Failed to load payment system. Please try again.');
+        return;
+      }
+
+      const { error: stripeError } = await stripe.redirectToCheckout({ sessionId });
+
+      if (stripeError) {
+        console.error('Stripe checkout error:', stripeError);
+        alert('Failed to process donation. Please try again.');
+      }
+    } catch (err) {
+      console.error('Payment error:', err);
+      alert('An error occurred. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -188,11 +234,13 @@ export default function Donate() {
 
               {/* Donate Button */}
               <motion.button
-                className="w-full bg-[#2c3e50] text-white py-4 rounded-xl font-semibold text-lg shadow-lg"
+                onClick={handleDonate}
+                disabled={isLoading}
+                className="w-full bg-[#2c3e50] text-white py-4 rounded-xl font-semibold text-lg shadow-lg disabled:opacity-75 disabled:cursor-not-allowed"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                Donate ${donationAmount}
+                {isLoading ? 'Processing...' : `Donate $${donationAmount}`}
               </motion.button>
             </div>
           </div>
