@@ -14,6 +14,8 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { amount, type, category } = body;
 
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+
     // Create Stripe checkout session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -31,8 +33,8 @@ export async function POST(req: Request) {
         },
       ],
       mode: type.toLowerCase() === 'monthly' ? 'subscription' : 'payment',
-      success_url: `${req.headers.get('origin')}/donate/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${req.headers.get('origin')}/donate?canceled=true`,
+      success_url: `${baseUrl}/donate/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${baseUrl}/donate?canceled=true`,
       metadata: {
         type,
         category,
