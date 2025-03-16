@@ -1,8 +1,12 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_51QrtV9AO9M57i7sPDP6s98coV0weckJ11KCqEkfxCm9g7sQe0DnP9YRobAJXRak2oH30F7VcQ3GiU75LSbQZeSt700r8vYT8iV', {
-  apiVersion: '2023-10-16'
+if (!process.env.STRIPE_SECRET_KEY) {
+  throw new Error('STRIPE_SECRET_KEY is not set');
+}
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+  apiVersion: '2025-02-24.acacia'
 });
 
 export async function POST(req: Request) {
