@@ -9,26 +9,38 @@ console.log('Environment variables:', {
   NODE_ENV: process.env.NODE_ENV
 });
 
-if (!process.env.STRIPE_SECRET_KEY) {
-  console.error('STRIPE_SECRET_KEY is missing in checkout route');
-  throw new Error('STRIPE_SECRET_KEY is not set');
-}
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: '2025-02-24.acacia'
-});
-
 export const dynamic = 'force-dynamic';
 
+if (!process.env.STRIPE_SECRET_KEY) {
+  console.error('STRIPE_SECRET_KEY is not configured in environment variables');
+}
+
+if (!process.env.NEXT_PUBLIC_BASE_URL) {
+  console.error('NEXT_PUBLIC_BASE_URL is not configured in environment variables');
+}
+
+const stripe = process.env.STRIPE_SECRET_KEY 
+  ? new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: '2025-02-24.acacia' })
+  : null;
+
 export async function POST(req: Request) {
+  if (!stripe) {
+    return NextResponse.json(
+      { error: { message: 'Stripe is not properly configured' } },
+      { status: 500 }
+    );
+  }
+
+  if (!process.env.NEXT_PUBLIC_BASE_URL) {
+    return NextResponse.json(
+      { error: { message: 'Base URL is not configured' } },
+      { status: 500 }
+    );
+  }
+
   try {
     const body = await req.json();
     const { amount, type, category } = body;
-
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-    if (!baseUrl) {
-      throw new Error('NEXT_PUBLIC_BASE_URL is not set');
-    }
 
     // Create Stripe checkout session
     const session = await stripe.checkout.sessions.create({
@@ -47,8 +59,8 @@ export async function POST(req: Request) {
         },
       ],
       mode: type.toLowerCase() === 'monthly' ? 'subscription' : 'payment',
-      success_url: `${baseUrl}/donate/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${baseUrl}/donate?canceled=true`,
+      success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/donate/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/donate?canceled=true`,
       metadata: {
         type,
         category,
