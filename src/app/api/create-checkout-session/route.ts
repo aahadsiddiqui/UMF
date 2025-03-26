@@ -9,6 +9,7 @@ console.log('Environment variables:', {
   NODE_ENV: process.env.NODE_ENV
 });
 
+export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
 
 if (!process.env.STRIPE_SECRET_KEY) {
