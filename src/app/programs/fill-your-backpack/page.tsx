@@ -322,7 +322,7 @@ export default function FillYourBackpack() {
               whileTap={{ scale: 0.95 }}
             >
               <button
-                onClick={() => openDonateModal('Fill Your Backpack Campaign')}
+                onClick={handleDonateClick}
                 className="inline-block bg-white text-[#2c3e50] px-8 py-4 rounded-full text-lg font-semibold hover:bg-gray-100 transition-colors shadow-lg"
               >
                 Donate Today
