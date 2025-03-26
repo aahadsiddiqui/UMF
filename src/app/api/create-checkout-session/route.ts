@@ -3,9 +3,9 @@ import Stripe from 'stripe';
 
 // Debug logging
 console.log('Checkout session route starting');
-console.log('STRIPE_SECRET_KEY exists:', !!process.env.STRIPE_SECRET_KEY);
-console.log('Environment variables:', {
-  NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
+console.log('Environment check:', {
+  STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY ? 'exists' : 'missing',
+  NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL ? 'exists' : 'missing',
   NODE_ENV: process.env.NODE_ENV
 });
 
@@ -25,7 +25,10 @@ const stripe = process.env.STRIPE_SECRET_KEY
   : null;
 
 export async function POST(req: Request) {
+  console.log('POST request received');
+  
   if (!stripe) {
+    console.error('Stripe initialization failed');
     return NextResponse.json(
       { error: { message: 'Stripe is not properly configured' } },
       { status: 500 }
@@ -33,6 +36,7 @@ export async function POST(req: Request) {
   }
 
   if (!process.env.NEXT_PUBLIC_BASE_URL) {
+    console.error('Base URL is missing');
     return NextResponse.json(
       { error: { message: 'Base URL is not configured' } },
       { status: 500 }
@@ -40,14 +44,22 @@ export async function POST(req: Request) {
   }
 
   try {
+    console.log('Parsing request body');
     const body = await req.json();
+    console.log('Request body:', { ...body, amount: body.amount ? 'exists' : 'missing' });
+    
     const { amount, type, category, quantity, description } = body;
     const isSubscription = type.toLowerCase() === 'monthly';
 
+    // Ensure base URL has https:// protocol
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL.startsWith('http') 
+      ? process.env.NEXT_PUBLIC_BASE_URL 
+      : `https://${process.env.NEXT_PUBLIC_BASE_URL}`;
+
+    console.log('Creating line items');
     // Create line items based on campaign type and subscription status
     let lineItems;
     if (category === 'Fill Your Backpack') {
-      // For Fill Your Backpack campaign
       const priceData = {
         currency: 'cad',
         product_data: {
@@ -58,7 +70,6 @@ export async function POST(req: Request) {
       };
 
       if (isSubscription) {
-        // For monthly subscription, add recurring price
         Object.assign(priceData, {
           recurring: {
             interval: 'month',
@@ -71,7 +82,6 @@ export async function POST(req: Request) {
         quantity: quantity || 1,
       }];
     } else {
-      // For other donations
       const priceData = {
         currency: 'cad',
         product_data: {
@@ -82,7 +92,6 @@ export async function POST(req: Request) {
       };
 
       if (isSubscription) {
-        // For monthly subscription, add recurring price
         Object.assign(priceData, {
           recurring: {
             interval: 'month',
@@ -96,13 +105,13 @@ export async function POST(req: Request) {
       }];
     }
 
-    // Create Stripe checkout session
+    console.log('Creating Stripe checkout session');
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: lineItems,
       mode: isSubscription ? 'subscription' : 'payment',
-      success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/donate/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/donate?canceled=true`,
+      success_url: `${baseUrl}/donate/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${baseUrl}/donate?canceled=true`,
       metadata: {
         type,
         category,
@@ -111,9 +120,15 @@ export async function POST(req: Request) {
       },
     });
 
+    console.log('Checkout session created successfully');
     return NextResponse.json({ sessionId: session.id });
   } catch (err: any) {
-    console.error('Error creating checkout session:', err);
+    console.error('Error creating checkout session:', {
+      message: err.message,
+      stack: err.stack,
+      type: err.type,
+      code: err.code
+    });
     return NextResponse.json(
       { error: { message: err.message } },
       { status: 500 }
