@@ -14,7 +14,7 @@ const DonationBar = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const donationTypes = ['One-Time', 'Monthly'];
-  const categories = ['Where Most Needed', 'Afghanistan Relief', 'Uganda Healthcare', 'Education'];
+  const categories = ['Afghanistan Orphan Relief', 'Uganda Healthcare', 'Zakat', 'Where Most Needed'];
   const amounts = ['30', '50', '100', '250', '500'];
 
   const handleDonateClick = async () => {

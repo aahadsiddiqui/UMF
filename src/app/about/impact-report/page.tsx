@@ -3,7 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Amiri } from 'next/font/google';
-import { FaUsers, FaGlobeAmericas, FaHandHoldingHeart, FaSchool, FaDownload } from 'react-icons/fa';
+import { FaUsers, FaGlobeAmericas, FaHandHoldingHeart, FaSchool, FaDownload, FaHeartbeat } from 'react-icons/fa';
 import Footer from '../../../components/Footer';
 
 const amiri = Amiri({ 
@@ -21,25 +21,25 @@ export default function ImpactReport() {
 
   const impactStats = [
     {
-      number: "1,400+",
+      number: "1,800+",
       label: "Backpacks Distributed",
       icon: <FaSchool className="w-8 h-8" />,
       description: "Supporting education through essential supplies"
     },
     {
-      number: "300+",
-      label: "Warm Meals Served",
-      icon: <FaHandHoldingHeart className="w-8 h-8" />,
-      description: "Addressing food insecurity in our community"
-    },
-    {
-      number: "6",
-      label: "Countries Reached",
-      icon: <FaGlobeAmericas className="w-8 h-8" />,
-      description: "Making a global impact across borders"
-    },
-    {
       number: "1,000+",
+      label: "Orphans Supported",
+      icon: <FaHandHoldingHeart className="w-8 h-8" />,
+      description: "Providing care and support to orphans in need"
+    },
+    {
+      number: "500+",
+      label: "Vaccines Delivered",
+      icon: <FaHeartbeat className="w-8 h-8" />,
+      description: "Promoting health and wellness in communities"
+    },
+    {
+      number: "15,000+",
       label: "Lives Impacted",
       icon: <FaUsers className="w-8 h-8" />,
       description: "Creating positive change in communities"
@@ -47,6 +47,15 @@ export default function ImpactReport() {
   ];
 
   const yearlyHighlights = [
+    {
+      year: "2024",
+      achievements: [
+        "Supported orphans in Afghanistan",
+        "Launched Fuel your health",
+        "Delivered 500 vaccines in Indonesia",
+        "Sponsored local community initiatives"
+      ]
+    },
     {
       year: "2023",
       achievements: [

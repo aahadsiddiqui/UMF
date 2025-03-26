@@ -31,25 +31,25 @@ export default function WhoWeAre() {
 
   const milestones = [
     {
-      year: "2020",
+      year: "2021",
       title: "Our Beginning",
       description: "Started with a group of Muslim students",
       icon: FaSeedling
     },
     {
-      year: "2021",
+      year: "2022",
       title: "First Project",
       description: "Raised $2,000 with Nisa Homes",
       icon: FaHandHoldingHeart
     },
     {
-      year: "2022",
+      year: "2023",
       title: "Global Expansion",
       description: "Extended reach to multiple countries",
       icon: FaGlobeAmericas
     },
     {
-      year: "2023",
+      year: "2024",
       title: "Growing Community",
       description: "Building youth-driven initiatives",
       icon: FaUsers

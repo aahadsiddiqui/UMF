@@ -40,30 +40,73 @@ export async function POST(req: Request) {
 
   try {
     const body = await req.json();
-    const { amount, type, category } = body;
+    const { amount, type, category, quantity, description } = body;
+    const isSubscription = type.toLowerCase() === 'monthly';
+
+    // Create line items based on campaign type and subscription status
+    let lineItems;
+    if (category === 'Fill Your Backpack') {
+      // For Fill Your Backpack campaign
+      const priceData = {
+        currency: 'cad',
+        product_data: {
+          name: 'Fill Your Backpack Campaign',
+          description: description || `Donate backpacks to students in need`,
+        },
+        unit_amount: 1000, // C$10 per backpack
+      };
+
+      if (isSubscription) {
+        // For monthly subscription, add recurring price
+        Object.assign(priceData, {
+          recurring: {
+            interval: 'month',
+          },
+        });
+      }
+
+      lineItems = [{
+        price_data: priceData,
+        quantity: quantity || 1,
+      }];
+    } else {
+      // For other donations
+      const priceData = {
+        currency: 'cad',
+        product_data: {
+          name: category === 'zakaat' ? 'Zakaat Donation' : `${category} Donation`,
+          description: `${type} ${category === 'zakaat' ? 'Zakaat' : 'donation'} to United Muslim Fund - ${category}`,
+        },
+        unit_amount: amount * 100, // Convert to cents
+      };
+
+      if (isSubscription) {
+        // For monthly subscription, add recurring price
+        Object.assign(priceData, {
+          recurring: {
+            interval: 'month',
+          },
+        });
+      }
+
+      lineItems = [{
+        price_data: priceData,
+        quantity: 1,
+      }];
+    }
 
     // Create Stripe checkout session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
-      line_items: [
-        {
-          price_data: {
-            currency: 'cad',
-            product_data: {
-              name: `${category} Donation`,
-              description: `${type} donation to United Muslim Fund - ${category}`,
-            },
-            unit_amount: amount * 100, // Convert to cents
-          },
-          quantity: 1,
-        },
-      ],
-      mode: type.toLowerCase() === 'monthly' ? 'subscription' : 'payment',
+      line_items: lineItems,
+      mode: isSubscription ? 'subscription' : 'payment',
       success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/donate/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/donate?canceled=true`,
       metadata: {
         type,
         category,
+        isZakaat: category === 'zakaat' ? 'true' : 'false',
+        quantity: quantity ? quantity.toString() : '1',
       },
     });
 

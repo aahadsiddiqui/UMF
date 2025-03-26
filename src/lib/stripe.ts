@@ -17,6 +17,7 @@ try {
     stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
       apiVersion: '2025-02-24.acacia'
     });
+    console.log('Stripe initialized successfully');
   } else {
     console.error('STRIPE_SECRET_KEY is not configured in environment variables');
   }
@@ -25,8 +26,18 @@ try {
 }
 
 // Client-side Stripe promise
-export const stripePromise = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY 
-  ? loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
-  : null;
+const initializeStripePromise = () => {
+  if (!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) {
+    console.error('NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY is not configured');
+    return null;
+  }
+  try {
+    return loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
+  } catch (error) {
+    console.error('Error loading Stripe:', error);
+    return null;
+  }
+};
 
+export const stripePromise = initializeStripePromise();
 export default stripe; 

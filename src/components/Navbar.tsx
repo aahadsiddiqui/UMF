@@ -20,7 +20,10 @@ export default function Navbar() {
 
   const navItems = [
     {
-      title: <span className="flex items-center"><FaUsers className="w-5 h-5 mr-2 text-[#2c3e50]" />About</span>,
+      title: <span className="flex items-center">
+        <FaUsers className={`w-5 h-5 mr-2 ${isScrolled ? 'text-white' : 'text-[#2c3e50]'}`} />
+        About
+      </span>,
       href: '/about',
       dropdownItems: [
         { name: <span className="flex items-center"><FaGlobeAmericas className="w-4 h-4 mr-2 text-[#2c3e50]" />Who We Are</span>, href: '/about/who-we-are' },
@@ -32,7 +35,10 @@ export default function Navbar() {
       ]
     },
     {
-      title: <span className="flex items-center"><FaGlobeAmericas className="w-5 h-5 mr-2 text-[#2c3e50]" />Global Impacts</span>,
+      title: <span className="flex items-center">
+        <FaGlobeAmericas className={`w-5 h-5 mr-2 ${isScrolled ? 'text-white' : 'text-[#2c3e50]'}`} />
+        Global Impacts
+      </span>,
       href: '/global-impacts',
       dropdownItems: [
         { name: <span className="flex items-center"><FaGlobeAmericas className="w-4 h-4 mr-2 text-[#2c3e50]" />Turkey</span>, href: '/global-impacts/turkey' },
@@ -44,7 +50,10 @@ export default function Navbar() {
       ]
     },
     {
-      title: <span className="flex items-center"><FaHome className="w-5 h-5 mr-2 text-[#2c3e50]" />Local Impacts</span>,
+      title: <span className="flex items-center">
+        <FaHome className={`w-5 h-5 mr-2 ${isScrolled ? 'text-white' : 'text-[#2c3e50]'}`} />
+        Local Impacts
+      </span>,
       href: '/local-impacts',
       dropdownItems: [
         { name: <span className="flex items-center"><FaHome className="w-4 h-4 mr-2 text-[#2c3e50]" />Women's Shelter</span>, href: '/local-impacts/womens-shelter' },
@@ -54,7 +63,10 @@ export default function Navbar() {
       ]
     },
     {
-      title: <span className="flex items-center"><FaBook className="w-5 h-5 mr-2 text-[#2c3e50]" />Programs</span>,
+      title: <span className="flex items-center">
+        <FaBook className={`w-5 h-5 mr-2 ${isScrolled ? 'text-white' : 'text-[#2c3e50]'}`} />
+        Programs
+      </span>,
       href: '/programs',
       dropdownItems: [
         { name: <span className="flex items-center"><FaSchool className="w-4 h-4 mr-2 text-[#2c3e50]" />Fill Your Backpack</span>, href: '/programs/fill-your-backpack' },
@@ -116,7 +128,7 @@ export default function Navbar() {
               href="/donate"
               className="flex items-center bg-white text-[#2c3e50] px-6 py-2 rounded-full font-semibold hover:bg-gray-100 transition-colors"
             >
-              <FaHeart className="w-4 h-4 mr-2 text-[#2c3e50]" />
+              <FaHeart className={`w-4 h-4 mr-2 ${isScrolled ? 'text-[#2c3e50]' : 'text-[#2c3e50]'}`} />
               Donate
             </Link>
           </div>
@@ -127,7 +139,7 @@ export default function Navbar() {
               href="/donate"
               className="bg-white text-[#2c3e50] px-4 py-2 rounded-full font-semibold hover:bg-gray-100 transition-colors text-sm"
             >
-              <FaHeart className="inline-block w-4 h-4 mr-1" />
+              <FaHeart className={`inline-block w-4 h-4 mr-1 ${isScrolled ? 'text-[#2c3e50]' : 'text-[#2c3e50]'}`} />
               Donate
             </Link>
             <button

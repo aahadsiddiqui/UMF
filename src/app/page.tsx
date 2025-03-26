@@ -1,22 +1,62 @@
 'use client';
 
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useState, useRef } from 'react';
+import { motion, useInView, useAnimation } from 'framer-motion';
 import { Amiri } from 'next/font/google';
 import Link from 'next/link';
 import Image from 'next/image';
 import Footer from '../components/Footer';
 import GlobalImpactMap from '../components/GlobalImpactMap';
-import { useEffect, useState } from 'react';
 import { FaArrowRight } from 'react-icons/fa';
+import { useRouter } from 'next/navigation';
 
 const amiri = Amiri({ 
   weight: ['400', '700'],
   subsets: ['arabic'] 
 });
 
+// Custom hook for counting animation
+const useCounter = (end: number, duration: number = 2) => {
+  const [count, setCount] = useState(0);
+  const nodeRef = useRef(null);
+  const isInView = useInView(nodeRef);
+  const controls = useAnimation();
+  const roundToPlace = end >= 1000 ? 100 : 1;
+
+  useEffect(() => {
+    let startTimestamp: number | null = null;
+    let animationFrameId: number;
+
+    const animate = (timestamp: number) => {
+      if (!startTimestamp) startTimestamp = timestamp;
+      const progress = (timestamp - startTimestamp) / (duration * 1000);
+
+      if (progress < 1) {
+        setCount(Math.round((end * progress) / roundToPlace) * roundToPlace);
+        animationFrameId = requestAnimationFrame(animate);
+      } else {
+        setCount(end);
+      }
+    };
+
+    if (isInView) {
+      controls.start({ opacity: 1, scale: 1 });
+      animationFrameId = requestAnimationFrame(animate);
+    }
+
+    return () => {
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+    };
+  }, [isInView, end, duration, controls, roundToPlace]);
+
+  return { count, nodeRef, controls };
+};
+
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const router = useRouter();
 
   const slides = [
     {
@@ -26,10 +66,10 @@ export default function Home() {
       image: "/afghanistan.jpg",
       primaryCta: "Explore Relief",
       primaryLink: "/global-impacts/afghanistan",
-      secondaryCta: "Donate",
-      secondaryLink: "/donate",
+      secondaryCta: "Zakaat",
+      secondaryLink: "/donate?campaign=afghanistan-zakaat",
       primaryText: "Explore Relief",
-      secondaryText: "Donate"
+      secondaryText: "Zakaat"
     },
     {
       id: "02.",
@@ -82,11 +122,52 @@ export default function Home() {
   };
 
   const impactStats = [
-    { number: "15K+", label: "Meals Provided" },
-    { number: "1000+", label: "Students Supported" },
-    { number: "5", label: "Countries Reached" },
-    { number: "100%", label: "Donation Policy" }
+    { 
+      number: 200000,
+      prefix: "$",
+      suffix: "",
+      label: "Funds Raised",
+      link: "/donate",
+      emoji: "💰"
+    },
+    { 
+      number: 15000,
+      prefix: "",
+      suffix: "+",
+      label: "People Helped",
+      link: "/donate",
+      emoji: "🤝"
+    },
+    { 
+      number: 1800,
+      prefix: "",
+      suffix: "+",
+      label: "Backpacks Given",
+      link: "/programs/fill-your-backpack",
+      emoji: "🎒"
+    },
+    { 
+      number: 500,
+      prefix: "",
+      suffix: "+",
+      label: "Vaccines Delivered",
+      link: "/programs/fuel-your-health",
+      emoji: "💉"
+    },
+    { 
+      number: 7,
+      prefix: "",
+      suffix: "",
+      label: "Countries Helped",
+      link: "/donate",
+      emoji: "🌍"
+    }
   ];
+
+  // Add this function for number formatting
+  const formatNumber = (num: number) => {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
 
   return (
     <main className="min-h-screen">
@@ -229,119 +310,41 @@ export default function Home() {
       </section>
 
       {/* Hero Section with Parallax Effect */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden w-full">
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.1 }}
-          className="absolute inset-0 bg-[#2c3e50] pattern-grid-lg"
-        />
-        
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#2c3e50]/30 to-[#2c3e50]" />
-        
-        {/* Hadith Section - Inside Hero */}
-        <motion.div 
-          className="w-full max-w-7xl mx-auto px-4 relative z-10 text-center mb-16 pt-24"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          <div className={`mb-6 ${amiri.className}`}>
-            <h3 className="text-3xl sm:text-4xl md:text-5xl mb-4 leading-relaxed text-black">
-              {featuredHadith.arabic}
-            </h3>
-          </div>
-          <p className="text-2xl font-semibold mb-4 text-black">
-            "{featuredHadith.english}"
-          </p>
-          <div className="text-sm text-gray-700">
-            <p className="mb-1">{featuredHadith.source}</p>
-            <p>{featuredHadith.narrator}</p>
-          </div>
-        </motion.div>
-
-        {/* Main Hero Content */}
-        <motion.div 
-          className="container mx-auto px-4 relative z-10 text-center"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.3 }}
-        >
-          <motion.h1 
-            className="text-5xl md:text-7xl font-bold mb-6"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
-          >
-            <span className="bg-gradient-to-r from-white to-gray-200 text-transparent bg-clip-text">
-              Making a Difference
-            </span>
-            <br />
-            <motion.span 
-              className="text-4xl md:text-6xl relative inline-block"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.8 }}
-            >
-              <span className="bg-gradient-to-r from-[#2c3e50] to-[#3498db] text-transparent bg-clip-text">
-                Together
-              </span>
-              <motion.div 
-                className="absolute bottom-0 left-0 w-full h-0.5 bg-[#3498db]"
-                initial={{ width: "0%" }}
-                animate={{ width: "100%" }}
-                transition={{ duration: 1, delay: 1.2 }}
-              />
-            </motion.span>
-          </motion.h1>
-
-          <motion.p 
-            className="text-xl md:text-2xl mb-12 max-w-3xl mx-auto"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 1 }}
-          >
-            <span className="text-gray-200">Join us in our mission to</span>
-            <span className="text-[#3498db]"> create positive change </span>
-            <span className="text-gray-200">and</span>
-            <span className="text-[#3498db]"> empower communities </span>
-            <span className="text-gray-200">worldwide through youth-driven initiatives.</span>
-          </motion.p>
-
-          {/* Hero Section Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
-            <motion.div
+      <section className="relative min-h-[60vh] flex items-center justify-center">
+        <div className="absolute inset-0 bg-gradient-to-b from-gray-100 to-gray-300" />
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="max-w-4xl mx-auto text-center">
+            <div className={`${amiri.className} mb-4`}>
+              <h2 className="text-3xl md:text-4xl mb-3 leading-relaxed text-[#2c3e50]">
+                من دَلَّ عَلى خَيْرٍ فَلَهُ مِثْلُ أَجْرِ فَاعِلِهِ
+              </h2>
+            </div>
+            <p className="text-lg md:text-xl mb-2 text-[#2c3e50]">
+              "Whoever guides someone to goodness will have a reward like one who did it"
+            </p>
+            <div className="text-sm text-gray-600 mb-6">
+              <p>Sahih Muslim 1893</p>
+              <p>Narrated by Abu Mas'ud Al-Ansari (رضي الله عنه)</p>
+            </div>
+            <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              className="bg-[#2c3e50] text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-[#3a4f63] transition-colors shadow-lg"
+              onClick={() => router.push('/donate')}
             >
-              <Link 
-                href="/donate"
-                className="w-full sm:w-auto bg-white text-[#2c3e50] px-8 py-4 rounded-full text-lg font-semibold hover:bg-gray-100 transition-colors shadow-lg inline-block"
-              >
-                Donate Now
-              </Link>
-            </motion.div>
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Link 
-                href="/about/volunteer"
-                className="w-full sm:w-auto border-2 border-white text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-white hover:text-[#2c3e50] transition-colors shadow-lg inline-block"
-              >
-                Volunteer
-              </Link>
-            </motion.div>
+              Donate Now
+            </motion.button>
           </div>
-        </motion.div>
-
-        {/* Scroll Indicator - Updated position */}
+        </div>
+        
+        {/* Scroll Indicator */}
         <motion.div 
-          className="absolute bottom-8 right-8"
+          className="absolute bottom-4 left-1/2 transform -translate-x-1/2"
           animate={{ y: [0, 10, 0] }}
-          transition={{ repeat: Infinity, duration: 2 }}
+          transition={{ repeat: Infinity, duration: 1.5 }}
         >
-          <div className="w-6 h-10 border-2 border-white rounded-full flex justify-center">
-            <div className="w-1 h-3 bg-white rounded-full mt-2" />
+          <div className="w-6 h-10 border-2 border-[#2c3e50] rounded-full flex justify-center">
+            <div className="w-1 h-3 bg-[#2c3e50] rounded-full mt-2" />
           </div>
         </motion.div>
       </section>
@@ -376,25 +379,169 @@ export default function Home() {
       </section>
 
       {/* Impact Stats Section */}
-      <section className="py-20 bg-white">
+      <section className="py-12 md:py-20 bg-white">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {impactStats.map((stat, index) => (
-              <motion.div
-                key={index}
-                className="text-center"
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center max-w-4xl mx-auto mb-8 md:mb-12"
+          >
+            <h2 className="text-3xl md:text-4xl font-bold text-[#2c3e50] mb-4">
+              Our Impact By The Numbers
+            </h2>
+            <div className="w-24 h-1 bg-[#3498db] mx-auto"></div>
+          </motion.div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 md:gap-8 max-w-7xl mx-auto">
+            {impactStats.map((stat, index) => {
+              const { count, nodeRef, controls } = useCounter(stat.number);
+              
+              return (
+                <Link
+                  key={index}
+                  href={stat.link}
+                  className="group"
+                >
+                  <motion.div
+                    className="text-center p-4 md:p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow transform hover:-translate-y-1 duration-300"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.1 }}
+                  >
+                    <div className="text-4xl mb-3">{stat.emoji}</div>
+                    <motion.div
+                      ref={nodeRef}
+                      className="text-3xl md:text-4xl font-bold text-[#2c3e50] mb-2 group-hover:text-[#3498db] transition-colors"
+                      initial={{ opacity: 0, scale: 0.5 }}
+                      animate={controls}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                    >
+                      {stat.prefix}
+                      {count >= 1000 ? formatNumber(count) : count}
+                      {stat.suffix}
+                    </motion.div>
+                    <p className="text-gray-600 group-hover:text-[#3498db] transition-colors text-lg">
+                      {stat.label}
+                    </p>
+                  </motion.div>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* 100% Donation Policy Section */}
+      <section className="py-12 md:py-20 bg-white overflow-hidden">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center max-w-6xl mx-auto relative"
+          >
+            {/* Background Pattern */}
+            <motion.div 
+              className="absolute inset-0 bg-[#2c3e50] pattern-grid-lg opacity-5"
+              animate={{ 
+                backgroundPosition: ["0px 0px", "100px 100px"],
+                transition: { duration: 20, repeat: Infinity, ease: "linear" }
+              }}
+            />
+
+            <div className="bg-[#2c3e50] text-white rounded-2xl p-8 md:p-12 shadow-2xl relative z-10 backdrop-blur-sm">
+              <motion.h2 
+                className="text-4xl md:text-6xl font-bold mb-6"
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+              >
+                100% Donation Policy
+              </motion.h2>
+              <motion.p 
+                className="text-xl md:text-2xl mb-12"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
               >
-                <h3 className="text-4xl md:text-5xl font-bold text-[#2c3e50] mb-2">
-                  {stat.number}
-                </h3>
-                <p className="text-gray-600">{stat.label}</p>
+                Every dollar you donate goes directly to those in need
+              </motion.p>
+              
+              <div className="grid md:grid-cols-3 gap-6 md:gap-8 lg:gap-12">
+                {[
+                  {
+                    title: "100%",
+                    description: "Of your donation reaches the beneficiaries",
+                    icon: "💝",
+                    hoverColor: "group-hover:text-[#FF6B6B]"
+                  },
+                  {
+                    title: "0%",
+                    description: "Administrative fees taken from your donation",
+                    icon: "✨",
+                    hoverColor: "group-hover:text-[#4ECDC4]"
+                  },
+                  {
+                    title: "Transparent",
+                    description: "Full accountability of fund distribution",
+                    icon: "🤝",
+                    hoverColor: "group-hover:text-[#FFD93D]"
+                  }
+                ].map((item, index) => (
+                  <motion.div
+                    key={index}
+                    className="relative group cursor-pointer"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.1 * (index + 3) }}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <div className="absolute inset-0 bg-white/20 rounded-xl blur-xl group-hover:bg-white/30 transition-all duration-300" />
+                    <div className="bg-white/10 rounded-xl p-6 md:p-8 relative h-full border border-white/10 backdrop-blur-sm hover:bg-white/20 transition-all duration-300">
+                      <div className="text-4xl md:text-5xl mb-4 transform group-hover:scale-110 transition-transform duration-300">
+                        {item.icon}
+                      </div>
+                      <h3 className={`text-3xl md:text-4xl font-bold mb-3 transition-colors duration-300 ${item.hoverColor}`}>
+                        {item.title}
+                      </h3>
+                      <p className="text-lg md:text-xl text-white/90 group-hover:text-white transition-colors duration-300">
+                        {item.description}
+                      </p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* Interactive Call to Action */}
+              <motion.div
+                className="mt-12"
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.6 }}
+              >
+                <Link href="/donate">
+                  <motion.button
+                    className="bg-white text-[#2c3e50] px-8 py-4 rounded-full text-lg font-semibold group relative overflow-hidden"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <span className="relative z-10 group-hover:text-white transition-colors duration-300">
+                      Make a Difference Today
+                    </span>
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#FF6B6B] via-[#4ECDC4] to-[#FFD93D] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+                  </motion.button>
+                </Link>
               </motion.div>
-            ))}
-          </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 
