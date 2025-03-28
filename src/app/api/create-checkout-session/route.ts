@@ -111,8 +111,8 @@ export async function POST(req: Request) {
       payment_method_types: ['card'],
       line_items: lineItems,
       mode: isSubscription ? 'subscription' : 'payment',
-      success_url: `${baseUrl}/donate/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${baseUrl}/donate?canceled=true`,
+      success_url: `https://www.unitedmuslimfund.org/donate/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `https://www.unitedmuslimfund.org/donate?canceled=true`,
       metadata: {
         type,
         category,
