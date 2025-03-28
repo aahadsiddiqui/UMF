@@ -9,8 +9,9 @@ console.log('Environment check:', {
   NODE_ENV: process.env.NODE_ENV
 });
 
-export const runtime = 'edge';
-export const dynamic = 'force-dynamic';
+// Remove edge runtime and force-dynamic
+// export const runtime = 'edge';
+// export const dynamic = 'force-dynamic';
 
 if (!process.env.STRIPE_SECRET_KEY) {
   console.error('STRIPE_SECRET_KEY is not configured in environment variables');

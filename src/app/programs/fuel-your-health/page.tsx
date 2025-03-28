@@ -8,6 +8,7 @@ import { Amiri } from 'next/font/google';
 import { FaClinicMedical, FaHandHoldingWater, FaAppleAlt } from 'react-icons/fa';
 import Footer from '../../../components/Footer';
 import DonationModal from '../../../components/DonationModal';
+import { stripePromise } from '../../../lib/stripe';
 
 const amiri = Amiri({ 
   weight: ['400', '700'],
@@ -17,6 +18,9 @@ const amiri = Amiri({
 export default function FuelYourHealth() {
   const [isDonateModalOpen, setIsDonateModalOpen] = useState(false);
   const [selectedCampaign, setSelectedCampaign] = useState<string | undefined>();
+  const [vaccineCount, setVaccineCount] = useState(1);
+  const pricePerVaccine = 10;
+  const totalPrice = vaccineCount * pricePerVaccine;
 
   const hadith = {
     arabic: "مَا مَلَأَ آدَمِيٌّ وِعَاءً شَرًّا مِنْ بَطْنٍ",
@@ -46,6 +50,42 @@ export default function FuelYourHealth() {
   const openDonateModal = (campaign?: string) => {
     setSelectedCampaign(campaign);
     setIsDonateModalOpen(true);
+  };
+
+  const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setVaccineCount(parseInt(e.target.value));
+  };
+
+  const handleDonateClick = async () => {
+    try {
+      const response = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          amount: totalPrice,
+          type: 'One-Time',
+          category: 'Fuel Your Health',
+          quantity: vaccineCount,
+          description: `Donate ${vaccineCount} vaccine${vaccineCount > 1 ? 's' : ''} to those in need`,
+        }),
+      });
+
+      const { sessionId, error } = await response.json();
+      if (error) throw new Error(error.message);
+
+      // Redirect to Stripe Checkout
+      const stripe = await stripePromise;
+      if (!stripe) throw new Error('Failed to load payment system');
+
+      const { error: stripeError } = await stripe.redirectToCheckout({ sessionId });
+      if (stripeError) throw new Error(stripeError.message);
+
+    } catch (err: any) {
+      console.error('Payment error:', err);
+      alert('Failed to process donation. Please try again.');
+    }
   };
 
   return (
@@ -146,64 +186,99 @@ export default function FuelYourHealth() {
         </div>
       </section>
 
-      {/* After Uganda Campaign Section */}
+      {/* Donation Section */}
       <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-3xl md:text-4xl font-bold text-[#2c3e50] text-center mb-8"
+            >
+              Help us provide vaccines!
+            </motion.h2>
+
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="bg-white rounded-2xl shadow-xl overflow-hidden"
+              className="bg-white rounded-2xl shadow-lg overflow-hidden"
             >
-              <div className="relative h-64">
-                <Image
-                  src="/fuelyourhealth2.png"
-                  alt="Sudan Clinic Campaign"
-                  fill
-                  className="object-cover"
-                  priority
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#2c3e50] to-transparent" />
+              {/* Vaccine Graphic */}
+              <div className="relative h-48 bg-[#2c3e50] overflow-hidden flex items-center justify-center">
+                <motion.div
+                  className="relative"
+                  animate={{
+                    scale: 0.5 + (vaccineCount / 100) * 1.5,
+                    y: [0, -5, 0],
+                    rotate: [0, vaccineCount > 1 ? 5 : 0, 0]
+                  }}
+                  transition={{
+                    scale: { type: "spring", stiffness: 100, damping: 10 },
+                    y: { repeat: Infinity, duration: 2, ease: "easeInOut" },
+                    rotate: { duration: 0.5 }
+                  }}
+                  whileHover={{
+                    scale: (0.5 + (vaccineCount / 100) * 1.5) * 1.1,
+                    rotate: [0, -5, 5, 0],
+                    transition: {
+                      rotate: {
+                        duration: 0.5,
+                        repeat: 0
+                      }
+                    }
+                  }}
+                >
+                  <span className="text-7xl" role="img" aria-label="vaccine">💉</span>
+                </motion.div>
+                <div className="absolute bottom-4 left-0 right-0 text-center text-white">
+                  <p className="text-lg font-medium">C${totalPrice} / C$1,000</p>
+                </div>
               </div>
-              
-              <div className="p-8">
-                <div className="flex flex-wrap items-center justify-between gap-6 mb-6">
-                  <h2 className="text-3xl font-bold text-[#2c3e50]">
-                    Sudan Clinic Campaign
-                  </h2>
-                  <div className="flex items-center space-x-4">
-                    <div className="text-right">
-                      <p className="text-sm text-gray-600 mb-1">Progress</p>
-                      <p className="text-xl font-bold text-[#2c3e50]">
-                        C$15,597 / C$50,000
-                      </p>
-                    </div>
-                    <div className="w-20 h-20 rounded-full border-4 border-[#66e8fd] flex items-center justify-center">
-                      <span className="text-xl font-bold text-[#2c3e50]">31%</span>
-                    </div>
+
+              {/* Slider Section */}
+              <div className="p-6">
+                <div className="mb-6">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-sm font-medium text-gray-600">Number of Vaccines:</span>
+                    <span className="text-lg font-bold text-[#2c3e50]">{vaccineCount}</span>
+                  </div>
+                  <motion.div
+                    whileHover={{ scale: 1.02 }}
+                    className="w-full"
+                  >
+                    <input
+                      type="range"
+                      min="1"
+                      max="100"
+                      value={vaccineCount}
+                      onChange={handleSliderChange}
+                      className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#2c3e50]"
+                    />
+                  </motion.div>
+                  <div className="flex justify-between mt-2">
+                    <span className="text-sm text-gray-500">1 vaccine</span>
+                    <span className="text-sm text-gray-500">100 vaccines</span>
                   </div>
                 </div>
 
-                <div className="w-full bg-gray-200 rounded-full h-2 mb-6">
-                  <div 
-                    className="bg-[#66e8fd] h-2 rounded-full transition-all duration-1000"
-                    style={{ width: '31%' }}
-                  />
-                </div>
-
-                <div className="flex items-center justify-between mb-8">
-                  <p className="text-gray-600">8 Donations</p>
-                  <p className="text-gray-600">Goal: C$50,000</p>
+                <div className="text-center mb-6">
+                  <p className="text-lg font-medium text-gray-700">
+                    Total Donation: <span className="text-[#2c3e50] font-bold">C${totalPrice}</span>
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    {vaccineCount} {vaccineCount === 1 ? 'vaccine' : 'vaccines'} × C$10 each
+                  </p>
                 </div>
 
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  onClick={() => openDonateModal('Sudan Clinic Campaign')}
-                  className="w-full bg-[#2c3e50] text-white py-4 rounded-xl font-semibold text-lg shadow-lg hover:bg-[#3a4f63] transition-colors"
+                  onClick={handleDonateClick}
+                  className="w-full bg-[#2c3e50] text-white py-4 rounded-xl font-semibold text-lg hover:bg-[#3a4f63] transition-colors"
                 >
-                  Donate to Sudan Clinic
+                  Donate Now
                 </motion.button>
               </div>
             </motion.div>
