@@ -236,7 +236,7 @@ export default function GlobalImpactMap() {
     if (!mapInstance.current) return;
     const svg = window.d3.select(mapRef.current).select('svg');
     const currentScale = zoomLevel * factor;
-    if (currentScale >= 0.5 && currentScale <= 4) {
+    if (currentScale >= 0.25 && currentScale <= 4) {
       setZoomLevel(currentScale);
       svg.selectAll('g').attr('transform', `scale(${currentScale})`);
     }
@@ -291,40 +291,43 @@ export default function GlobalImpactMap() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 20 }}
-              className="absolute bottom-0 left-0 right-0 bg-white rounded-t-xl shadow-xl p-6 md:p-8 mx-4 md:mx-8 transform translate-y-0 transition-transform duration-300"
+              className="fixed inset-x-0 bottom-0 bg-white rounded-t-xl shadow-xl p-3 sm:p-4 md:p-6 mx-2 sm:mx-4 md:mx-8 transform translate-y-0 transition-transform duration-300 max-h-[85vh] overflow-y-auto z-50"
+              style={{
+                maxHeight: 'min(85vh, 600px)'
+              }}
             >
               <div className="max-w-4xl mx-auto">
-                <div className="flex justify-between items-start mb-4">
-                  <h3 className="text-2xl font-bold text-[#2c3e50]">{dataSet[selectedCountry].name}</h3>
+                <div className="flex justify-between items-start mb-2 sm:mb-3 md:mb-4">
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#2c3e50]">{dataSet[selectedCountry].name}</h3>
                   <button
                     onClick={() => setSelectedCountry(null)}
-                    className="text-gray-500 hover:text-gray-700"
+                    className="text-gray-500 hover:text-gray-700 p-1"
                   >
                     ×
                   </button>
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <p className="text-sm text-gray-600">Active Projects</p>
-                    <p className="text-2xl font-bold text-[#2c3e50]">{dataSet[selectedCountry].active}</p>
+                <div className="grid grid-cols-3 gap-2 sm:gap-3 md:gap-4 mb-2 sm:mb-3 md:mb-4">
+                  <div className="bg-gray-50 p-2 sm:p-3 md:p-4 rounded-lg">
+                    <p className="text-xs sm:text-sm text-gray-600">Active Projects</p>
+                    <p className="text-base sm:text-lg md:text-2xl font-bold text-[#2c3e50]">{dataSet[selectedCountry].active}</p>
                   </div>
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <p className="text-sm text-gray-600">New Initiatives</p>
-                    <p className="text-2xl font-bold text-[#2c3e50]">{dataSet[selectedCountry].new}</p>
+                  <div className="bg-gray-50 p-2 sm:p-3 md:p-4 rounded-lg">
+                    <p className="text-xs sm:text-sm text-gray-600">New Initiatives</p>
+                    <p className="text-base sm:text-lg md:text-2xl font-bold text-[#2c3e50]">{dataSet[selectedCountry].new}</p>
                   </div>
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <p className="text-sm text-gray-600">Impact Rate</p>
-                    <p className="text-2xl font-bold text-[#2c3e50]">{dataSet[selectedCountry].percentage}%</p>
+                  <div className="bg-gray-50 p-2 sm:p-3 md:p-4 rounded-lg">
+                    <p className="text-xs sm:text-sm text-gray-600">Impact Rate</p>
+                    <p className="text-base sm:text-lg md:text-2xl font-bold text-[#2c3e50]">{dataSet[selectedCountry].percentage}%</p>
                   </div>
                 </div>
 
-                <p className="text-gray-600 mb-4">{dataSet[selectedCountry].description}</p>
+                <p className="text-xs sm:text-sm md:text-base text-gray-600 mb-2 sm:mb-3 md:mb-4">{dataSet[selectedCountry].description}</p>
 
-                <div className="space-y-2 mb-4">
+                <div className="space-y-1 sm:space-y-1.5 md:space-y-2 mb-2 sm:mb-3 md:mb-4">
                   {dataSet[selectedCountry].achievements.map((achievement, index) => (
-                    <div key={index} className="flex items-center text-gray-700">
-                      <div className="w-2 h-2 rounded-full bg-[#3498db] mr-2" />
+                    <div key={index} className="flex items-center text-xs sm:text-sm md:text-base text-gray-700">
+                      <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 md:w-2 md:h-2 rounded-full bg-[#3498db] mr-2" />
                       <span>{achievement}</span>
                     </div>
                   ))}
@@ -332,7 +335,7 @@ export default function GlobalImpactMap() {
 
                 <Link href={dataSet[selectedCountry].link}>
                   <motion.div
-                    className="inline-flex items-center text-[#3498db] font-semibold hover:text-[#2c3e50] transition-colors"
+                    className="inline-flex items-center text-[#3498db] font-semibold hover:text-[#2c3e50] transition-colors text-xs sm:text-sm md:text-base"
                     whileHover={{ x: 5 }}
                   >
                     Learn More <FaArrowRight className="ml-2" />

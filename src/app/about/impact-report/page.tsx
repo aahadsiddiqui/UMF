@@ -131,12 +131,12 @@ export default function ImpactReport() {
 
       {/* Impact Stats */}
       <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
+        <div className="container mx-auto px-4 overflow-hidden">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 max-w-7xl mx-auto">
             {impactStats.map((stat, index) => (
               <motion.div
                 key={index}
-                className="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow"
+                className="bg-white rounded-xl p-4 md:p-8 shadow-lg hover:shadow-xl transition-shadow"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -163,26 +163,26 @@ export default function ImpactReport() {
 
       {/* Yearly Highlights */}
       <section className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-4 overflow-hidden">
           <motion.h2 
-            className="text-3xl md:text-4xl font-bold text-center mb-16 text-[#2c3e50]"
+            className="text-3xl md:text-4xl font-bold text-center mb-8 md:mb-16 text-[#2c3e50]"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
             Yearly Highlights
           </motion.h2>
-          <div className="max-w-4xl mx-auto space-y-12">
+          <div className="max-w-4xl mx-auto space-y-6 md:space-y-12">
             {yearlyHighlights.map((year, index) => (
               <motion.div
                 key={index}
-                className="bg-white rounded-xl p-8 shadow-lg"
+                className="bg-white rounded-xl p-4 md:p-8 shadow-lg"
                 initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
               >
-                <div className="flex items-start gap-8">
-                  <div className="text-4xl font-bold text-[#3498db] whitespace-nowrap">
+                <div className="flex flex-col md:flex-row items-start gap-4 md:gap-8">
+                  <div className="text-3xl md:text-4xl font-bold text-[#3498db] whitespace-nowrap">
                     {year.year}
                   </div>
                   <div className="space-y-4">

@@ -173,9 +173,9 @@ export default function WhoWeAre() {
           </div>
 
           {/* Image Carousel */}
-          <div className="max-w-6xl mx-auto mb-16">
+          <div className="max-w-6xl mx-auto px-4">
             <motion.div 
-              className="relative h-[500px] rounded-xl overflow-hidden shadow-2xl"
+              className="relative h-[300px] sm:h-[400px] md:h-[500px] rounded-xl overflow-hidden shadow-2xl"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
@@ -282,11 +282,11 @@ export default function WhoWeAre() {
       </section>
 
       {/* Impact Images Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4">
+      <section className="py-20">
+        <div className="container mx-auto px-4 overflow-hidden">
           <div className="max-w-6xl mx-auto">
             <motion.div 
-              className="grid md:grid-cols-2 gap-12 items-center"
+              className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 items-center"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
@@ -363,9 +363,9 @@ export default function WhoWeAre() {
 
       {/* Timeline Section */}
       <section className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-4 overflow-hidden">
           <div className="max-w-5xl mx-auto">
-            <div className="grid md:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
               {milestones.map((milestone, index) => (
                 <motion.div
                   key={index}

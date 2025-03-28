@@ -4,8 +4,19 @@ import DonationBar from '../components/DonationBar';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import 'leaflet/dist/leaflet.css'
+import { Metadata } from 'next';
 
 const inter = Inter({ subsets: ['latin'] });
+
+export const metadata: Metadata = {
+  title: 'United Muslim Fund',
+  description: 'Non profit organization dedicated to helping people around the world from a youth perspective',
+  icons: {
+    icon: '/favicon.png',
+    shortcut: '/favicon.png',
+    apple: '/favicon.png',
+  },
+};
 
 export default function RootLayout({
   children,

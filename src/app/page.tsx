@@ -175,7 +175,7 @@ export default function Home() {
       <section className="relative h-screen w-full overflow-hidden">
         {/* Mobile View */}
         <div className="md:hidden relative h-full w-full">
-          <motion.div
+        <motion.div
             key={slides[currentSlide].id}
             className="relative h-full w-full"
             initial={{ opacity: 0 }}
@@ -283,12 +283,12 @@ export default function Home() {
                           >
                             {slide.primaryText}
                           </Link>
-                          <Link
+              <Link 
                             href={slide.secondaryLink}
                             className="bg-white text-[#2c3e50] px-6 lg:px-8 py-3 text-lg font-semibold hover:bg-gray-100 transition-colors inline-block rounded-lg"
-                          >
+              >
                             {slide.secondaryText}
-                          </Link>
+              </Link>
                         </div>
                       </motion.div>
                     )}
@@ -336,7 +336,7 @@ export default function Home() {
             </motion.button>
           </div>
         </div>
-        
+
         {/* Scroll Indicator */}
         <motion.div 
           className="absolute bottom-4 left-1/2 transform -translate-x-1/2"
@@ -381,7 +381,7 @@ export default function Home() {
       {/* Impact Stats Section */}
       <section className="py-12 md:py-20 bg-white">
         <div className="container mx-auto px-4">
-          <motion.div
+              <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -399,17 +399,17 @@ export default function Home() {
               
               return (
                 <Link
-                  key={index}
+                key={index}
                   href={stat.link}
                   className="group"
                 >
                   <motion.div
                     className="text-center p-4 md:p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow transform hover:-translate-y-1 duration-300"
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.1 }}
-                  >
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+              >
                     <div className="text-4xl mb-3">{stat.emoji}</div>
                     <motion.div
                       ref={nodeRef}
@@ -426,7 +426,7 @@ export default function Home() {
                     <p className="text-gray-600 group-hover:text-[#3498db] transition-colors text-lg">
                       {stat.label}
                     </p>
-                  </motion.div>
+              </motion.div>
                 </Link>
               );
             })}
@@ -461,7 +461,7 @@ export default function Home() {
                 transition={{ duration: 0.5 }}
               >
                 100% Donation Policy
-              </motion.h2>
+          </motion.h2>
               <motion.p 
                 className="text-xl md:text-2xl mb-12"
                 initial={{ opacity: 0, y: 20 }}

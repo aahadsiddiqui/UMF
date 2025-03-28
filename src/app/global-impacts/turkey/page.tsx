@@ -89,9 +89,9 @@ export default function TurkeyRelief() {
   };
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-white overflow-x-hidden">
       {/* Hero Section */}
-      <section className="relative min-h-[80vh] flex items-center">
+      <section className="relative min-h-[90vh] sm:min-h-[80vh] flex items-center pt-16 sm:pt-24">
         <div className="absolute inset-0">
           <Image
             src="/turkey2.jpg"
@@ -103,22 +103,22 @@ export default function TurkeyRelief() {
           <div className="absolute inset-0 bg-gradient-to-r from-[#2c3e50]/90 to-[#2c3e50]/70" />
         </div>
 
-        <div className="relative z-10 container mx-auto px-4">
+        <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="max-w-3xl text-white"
           >
-            <h1 className="text-5xl md:text-7xl font-bold mb-6">
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-4 sm:mb-6">
               Turkey Earthquake Relief
             </h1>
-            <p className="text-xl md:text-2xl text-gray-200 mb-12">
+            <p className="text-lg sm:text-xl md:text-2xl text-gray-200 mb-8 sm:mb-12">
               Supporting communities affected by the devastating earthquakes in Turkey through immediate relief and long-term recovery
             </p>
-            <div className={`mb-8 ${amiri.className}`}>
-              <p className="text-3xl mb-3">{hadith.arabic}</p>
-              <p className="text-lg italic">"{hadith.english}"</p>
-              <p className="text-sm text-gray-300 mt-2">
+            <div className={`mb-6 sm:mb-8 ${amiri.className}`}>
+              <p className="text-2xl sm:text-3xl mb-2 sm:mb-3">{hadith.arabic}</p>
+              <p className="text-base sm:text-lg italic">"{hadith.english}"</p>
+              <p className="text-xs sm:text-sm text-gray-300 mt-2">
                 {hadith.source} - {hadith.narrator}
               </p>
             </div>
@@ -126,7 +126,7 @@ export default function TurkeyRelief() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => openDonateModal('Turkey Earthquake Relief')}
-              className="inline-block bg-white text-[#2c3e50] px-8 py-4 rounded-full text-lg font-semibold hover:bg-gray-100 transition-colors shadow-lg"
+              className="inline-block bg-white text-[#2c3e50] px-6 sm:px-8 py-3 sm:py-4 rounded-full text-base sm:text-lg font-semibold hover:bg-gray-100 transition-colors shadow-lg"
             >
               Support Now
             </motion.button>
