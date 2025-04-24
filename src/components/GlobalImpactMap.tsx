@@ -129,6 +129,19 @@ const dataSet: { [key: string]: CountryData } = {
       "Educational program support",
       "Community development"
     ]
+  },
+  UGA: {
+    name: "Uganda",
+    active: 4,
+    new: 1,
+    percentage: 90,
+    description: "Partnering with Kids Uganda to establish a comprehensive healthcare clinic, providing essential medical services and community support.",
+    link: "/global-impacts/uganda",
+    achievements: [
+      "Clinic lease secured",
+      "Renovation in progress",
+      "Healthcare accessibility",
+    ]
   }
 };
 

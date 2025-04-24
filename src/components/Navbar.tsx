@@ -47,6 +47,8 @@ export default function Navbar() {
         { name: <span className="flex items-center"><FaGlobeAmericas className="w-4 h-4 mr-2 text-[#2c3e50]" />Pakistan</span>, href: '/global-impacts/pakistan' },
         { name: <span className="flex items-center"><FaGlobeAmericas className="w-4 h-4 mr-2 text-[#2c3e50]" />Egypt</span>, href: '/global-impacts/egypt' },
         { name: <span className="flex items-center"><FaGlobeAmericas className="w-4 h-4 mr-2 text-[#2c3e50]" />Indonesia</span>, href: '/global-impacts/indonesia' },
+        { name: <span className="flex items-center"><FaGlobeAmericas className="w-4 h-4 mr-2 text-[#2c3e50]" />Canada</span>, href: '/global-impacts/canada' },
+        { name: <span className="flex items-center"><FaGlobeAmericas className="w-4 h-4 mr-2 text-[#2c3e50]" />Uganda</span>, href: '/global-impacts/uganda' },
       ]
     },
     {
@@ -160,7 +162,7 @@ export default function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden bg-white border-t border-gray-200 shadow-lg overflow-hidden"
+            className="lg:hidden bg-white border-t border-gray-200 shadow-lg overflow-hidden fixed top-20 left-0 right-0 max-h-[calc(100vh-5rem)] overflow-y-auto"
           >
             <div className="container mx-auto px-4 py-6">
               <div className="space-y-6">

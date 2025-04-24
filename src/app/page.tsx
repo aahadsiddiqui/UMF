@@ -87,7 +87,7 @@ export default function Home() {
       id: "03.",
       title: "Sh. Assim Al Hakeem Tour",
       description: "Join us for an enlightening evening with Sheikh Assim Al Hakeem",
-      image: "/assim.jpeg",
+      image: "/assimhome.jpg",
       primaryLink: "/local-impacts/events",
       secondaryLink: "/donate",
       primaryText: "Register Now",
@@ -104,13 +104,6 @@ export default function Home() {
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % slides.length);
-  };
-
-  const featuredHadith = {
-    arabic: "مَن دَلَّ عَلَى خَيْرٍ فَلَهُ مِثْلُ أَجْرِ فَاعِلِهِ",
-    english: "Whoever guides someone to goodness will have a reward like one who did it",
-    source: "Sahih Muslim 1893",
-    narrator: "Narrated by Abu Mas'ud Al-Ansari (رضي الله عنه)"
   };
 
   const charityHadith = {
@@ -307,46 +300,6 @@ export default function Home() {
           <span className="text-sm opacity-60">Next</span>
           <FaArrowRight className="w-4 h-4" />
         </button>
-      </section>
-
-      {/* Hero Section with Parallax Effect */}
-      <section className="relative min-h-[60vh] flex items-center justify-center">
-        <div className="absolute inset-0 bg-gradient-to-b from-gray-100 to-gray-300" />
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className={`${amiri.className} mb-4`}>
-              <h2 className="text-3xl md:text-4xl mb-3 leading-relaxed text-[#2c3e50]">
-                من دَلَّ عَلى خَيْرٍ فَلَهُ مِثْلُ أَجْرِ فَاعِلِهِ
-              </h2>
-            </div>
-            <p className="text-lg md:text-xl mb-2 text-[#2c3e50]">
-              "Whoever guides someone to goodness will have a reward like one who did it"
-            </p>
-            <div className="text-sm text-gray-600 mb-6">
-              <p>Sahih Muslim 1893</p>
-              <p>Narrated by Abu Mas'ud Al-Ansari (رضي الله عنه)</p>
-            </div>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-[#2c3e50] text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-[#3a4f63] transition-colors shadow-lg"
-              onClick={() => router.push('/donate')}
-            >
-              Donate Now
-            </motion.button>
-          </div>
-        </div>
-
-        {/* Scroll Indicator */}
-        <motion.div 
-          className="absolute bottom-4 left-1/2 transform -translate-x-1/2"
-          animate={{ y: [0, 10, 0] }}
-          transition={{ repeat: Infinity, duration: 1.5 }}
-        >
-          <div className="w-6 h-10 border-2 border-[#2c3e50] rounded-full flex justify-center">
-            <div className="w-1 h-3 bg-[#2c3e50] rounded-full mt-2" />
-          </div>
-        </motion.div>
       </section>
 
       {/* Second Hadith Section */}
